@@ -1,0 +1,259 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/web/template/innerLayout.xhtml">
+    <ui:param name="paramBackBean" value="#{listaLectoresBackBean}"/>
+
+    <ui:define name="headerContent">
+Banco
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formLectores">
+            <div class="ui-grid">
+
+                <div class="ui-g-12 ui-md-6 ui-lg-12">
+                    <div class="ui-g-12 ui-md-6 ui-lg-6">
+                    </div>
+                    <div class="ui-g-12 ui-md-6 ui-lg-2">
+                        <p:commandButton icon="fa fa-save" styleClass="green-btn" value="Nuevo registro"
+                                         style="vertical-align: middle !important"
+                                         actionListener="#{listaLectoresBackBean.modales}"/>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-2">
+                        <p:commandButton icon="fa fa-pencil" styleClass="orange-btn" value="Editar"
+                                         style="vertical-align: middle !important" update=":formEditarRegistro"
+                                         actionListener="#{listaLectoresBackBean.visualziarRegistro}"/>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-2">
+                        <p:commandButton icon="fa fa-trash-o" styleClass="red-btn" value="Eliminar"
+                                         style="vertical-align: middle !important"
+                                         action="#{listaLectoresBackBean.guardar}"/>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <p:panel id="basic" style="margin-bottom:20px">
+                        <p:growl id="messages" showDetail="false"/>
+                        <p:menu>
+                            <p:submenu label="Menú de opciones">
+                                <p:menuitem value="Readers" actionListener="#{listaLectoresBackBean.cambiarTabla(1)}"
+                                            update="dtReaders" ajax="false"/>
+                                <p:menuitem value="Blogs" actionListener="#{listaLectoresBackBean.cambiarTabla(2)}"
+                                            update="dtBlogs" ajax="false"/>
+                                <p:menuitem value="Readers por blog"
+                                            actionListener="#{listaLectoresBackBean.cambiarTabla(3)}" update="dtBlogReaders"
+                                            ajax="false"/>
+                            </p:submenu>
+                        </p:menu>
+                    </p:panel>
+                </div>
+
+
+                <div class="ui-g-12 ui-md-6 ui-lg-9">
+                    <p:dataTable id="dtReaders" var="r" value="#{listaLectoresBackBean.listaLectores}"
+                                 widgetVar="dtReaders"
+                                 selectionMode="single"
+                                 paginatorPosition="top"
+                                 rowKey="#{r.id}"
+                                 rows="12"
+                                 pageLinks="5"
+                                 reflow="true"
+                                 selection="#{listaLectoresBackBean.registroSeleccionado}"
+                                 paginator="true"
+                                 scrollable="false"
+                                 scrollWidth="100%"
+                                 scrollHeight="100%"
+                                 rendered="#{listaLectoresBackBean.tablaSeleccionada == 1}"
+                                 paginatorTemplate="#{configApplicationBean.paginatorTemplate}"
+                                 currentPageReportTemplate="#{configApplicationBean.currentPageReportTemplate}">
+
+                        <p:ajax event="rowSelect" listener="#{listaLectoresBackBean.visualziarRegistro()}"
+                                rocess="@form, :formEditarRegistro"
+                                update=":formEditarRegistro"/>
+
+                        <p:column headerText="Id">
+                            <h:outputText value="#{r.id}" style="width: 10%"/>
+                        </p:column>
+
+                        <p:column headerText="Name">
+                            <h:outputText value="#{r.name}" style="width: 10%"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:dataTable id="dtBlogs" var="r" value="#{listaLectoresBackBean.listaBlogs}" widgetVar="dtBlogs"
+                                 selectionMode="single"
+
+                                 rowKey="#{r.id}"
+                                 selection="#{listaLectoresBackBean.registroSeleccionado}" reflow="true" rows="5"
+                                 paginator="true"
+                                 lazy="true"
+                                 rendered="#{listaLectoresBackBean.tablaSeleccionada == 2}">
+
+                        <p:column headerText="ID">
+                            <h:outputText value="#{r.id}"/>
+                        </p:column>
+
+                        <p:column headerText="Title">
+                            <h:outputText value="#{r.title}"/>
+                        </p:column>
+
+                        <p:column headerText="Description">
+                            <h:outputText value="#{r.description}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:dataTable id="dtBlogReaders" var="r" value="#{listaLectoresBackBean.listaReaders}"
+                                 widgetVar="dtBlogReaders"
+                                 selectionMode="single"
+                                 rowKey="#{r.id}"
+                                 selection="#{listaLectoresBackBean.registroSeleccionado}" reflow="true" rows="5"
+                                 paginator="true"
+                                 lazy="true"
+                                 rendered="#{listaLectoresBackBean.tablaSeleccionada == 3}">
+
+                        <p:column headerText="ID">
+                            <h:outputText value="#{r.id}"/>
+                        </p:column>
+
+                        <p:column headerText="Readers ID">
+                            <h:outputText value="#{r.readers_nombre}"/>
+                        </p:column>
+
+                        <p:column headerText="Title">
+                            <h:outputText value="#{r.title}"/>
+                        </p:column>
+
+                        <p:column headerText="Description">
+                            <h:outputText value="#{r.description}"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </div>
+            </div>
+        </h:form>
+
+        <!--        /////////////////////////////////////////Nuevo registro//////////////////////////////////////////////-->
+        <p:dialog header="Nuevo registro " widgetVar="formNuevoRegistro" modal="true" resizable="true"
+                  closable="false" hideEffect="fold" styleClass="disable-scroll" responsive="true">
+            <h:form id="formNuevoRegistro" styleClass="maxHeight">
+
+                <div class="ui-grid">
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+                        <p:commandButton icon="fa fa-save" styleClass="green-btn" value="Guardar"
+                                         ajax="false"
+                                         style="vertical-align: middle !important"
+                                         actionListener="#{listaLectoresBackBean.guardarRegistro}"/>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+                        <p:commandButton icon="fa fa-close" styleClass="orange-btn" value="#{labelName.btnCerrarModal}"
+                                         immediate="true"
+                                         onclick="PF('formNuevoRegistro').hide()"
+                                         style="width: 100%">
+                        </p:commandButton>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-6">
+                        <p:outputLabel value="Nombre:"/>
+                        <p:inputText autocomplete="off" id="Nombre" styleClass="Wid80"
+                                     label="Nombre"
+                                     value="#{listaLectoresBackBean.txtNombre}">
+                        </p:inputText>
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <!--        /////////////////////////////////////////Editar registro//////////////////////////////////////////////-->
+        <p:dialog header="Editar registro" id="EditarRegistro" widgetVar="EditarRegistro" modal="true" resizable="true"
+                  closable="false" hideEffect="fold" styleClass="disable-scroll" responsive="true">
+            <h:form id="formEditarRegistro" styleClass="maxHeight">
+
+                <div class="ui-grid">
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+                        <p:commandButton icon="fa fa-save" styleClass="green-btn" value="Guardar"
+                                         style="vertical-align: middle !important" update=":formLectores :formEditarRegistro"
+                                         process=":formEditarRegistro"
+                                         actionListener="#{listaLectoresBackBean.editarRegistro}"/>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+                        <p:commandButton icon="fa fa-close" styleClass="orange-btn" value="#{labelName.btnCerrarModal}"
+                                         process=""
+                                         update=":formLectores"
+                                         onclick="PF('formEditarRegistro').hide()"
+                                         style="width: 100%">
+                        </p:commandButton>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-6">
+                        <p:outputLabel value="Nombre:"/>
+                        <p:inputText autocomplete="off" id="Name" widgetVar="Name" styleClass="Wid80"
+                                     label="Nombre"
+                                     value="#{listaLectoresBackBean.txtNombre}">
+                        </p:inputText>
+                    </div>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <!--        /////////////////////////////////////////Guardar blog//////////////////////////////////////////////-->
+        <p:dialog header="Nuevo blog" id="GuardarBlog" widgetVar="GuardarBlog" modal="true" resizable="true"
+                  closable="false" hideEffect="fold" styleClass="disable-scroll" responsive="true">
+            <h:form id="formGuardarBlog" styleClass="maxHeight">
+
+                <div class="ui-grid">
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+                        <p:commandButton icon="fa fa-save" styleClass="green-btn" value="Guardar"
+                                         ajax="false"
+                                         style="vertical-align: middle !important"
+                                         actionListener="#{listaLectoresBackBean.guardarRegistro}"
+                        />
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-4">
+                        <p:commandButton icon="fa fa-close" styleClass="orange-btn" value="#{labelName.btnCerrarModal}"
+                                         immediate="true"
+                                         onclick="PF('formGuardarBlog').hide()"
+                                         style="width: 100%">
+                        </p:commandButton>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-6">
+                        <p:outputLabel value="Titulo:"/>
+                        <p:inputText autocomplete="off" id="title" styleClass="Wid80"
+                                     label="title"
+                                     value="#{listaLectoresBackBean.txtTitle}">
+                        </p:inputText>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-lg-6">
+                        <p:outputLabel value="descripción:"/>
+                        <p:inputText autocomplete="off" id="description" styleClass="Wid80"
+                                     label="description"
+                                     value="#{listaLectoresBackBean.txtDescription}">
+                        </p:inputText>
+                    </div>
+
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>

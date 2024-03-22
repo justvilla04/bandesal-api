@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="LinusPersistenceUnit">
+        <class>sv.gob.bandesal.bandesal.model.entity.actividadhotelera.EmpresaTuristicaHabitacion</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.controlportuario.Buque</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.controlportuario.Crucero</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.catalogo.Institucion</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.catalogo.MedioComunicacion</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.controlportuario.FichaCrucero</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.controlportuario.DestinosAVisitar</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.controlportuario.InstitucionesParticipantes</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.controlportuario.ParticipantesIntur</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.catalogo.Destinos</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.controlportuario.Destinos</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.transporte.SolicitudTransporteVehiculo</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.historialempresa.EmpresasTuristicaI</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.historialempresa.EmpresasTuristica</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.historialempresa.EmpresaTuristicaFuerzaLaboral</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.registro.EmpresaTuristicaSinHerramienta</class>
+        <class>sv.gob.bandesal.bandesal.model.entity.contabilidadauxiliar.InspeccionMonto</class>
+        <properties>
+            <property name="toplink.jdbc.url" value="jdbc:postgresql://bandesal-bd-des.intur.gob.ni:5432/siit_desarrollo"/>
+            <property name="toplink.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="hibernate.connection.url"
+                      value="jdbc:postgresql://bandesal-bd-des.intur.gob.ni:5432/siit_desarrollo"/>
+            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+            <property name="openjpa.ConnectionURL"
+                      value="jdbc:postgresql://bandesal-bd-des.intur.gob.ni:5432/siit_desarrollo"/>
+            <property name="openjpa.ConnectionDriverName" value="org.postgresql.Driver"/>
+            <property name="eclipselink.jdbc.url"
+                      value="jdbc:postgresql://bandesal-bd-des.intur.gob.ni:5432/siit_desarrollo"/>
+            <property name="eclipselink.jdbc.driver" value="org.postgresql.Driver"/>
+        </properties>
+    </persistence-unit>
+
+</persistence>
